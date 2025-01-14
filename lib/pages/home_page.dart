@@ -22,12 +22,6 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
 
     // if this is the 1st time ever opening the app, then create default data
-    // if(_myBox.get("TODOLIST") == null) {
-    //   db.createInitialData();
-    // } else {
-    //   db.loadData();
-    // }
-
     super.initState();
     _initializeHiveBox();
   }
@@ -44,12 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   // text controller
   final _controller = TextEditingController();
-
-  // list of todo tasks
-  // List todoList = [
-  //   ["Make tutorial", false],
-  //   ["Do Excercise", false],
-  // ];
 
   // check box tapping'
   void checkBoxChanged(bool? value, int index) {
@@ -130,5 +118,3 @@ extension FutureBoxExtension on Future<Box> {
     return box.get(key); // Retrieve the value for the given key
   }
 }
-
-

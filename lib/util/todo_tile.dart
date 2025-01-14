@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class TodoTile extends StatelessWidget {
-
+class TodoTile extends StatefulWidget {
   final String taskName;
   final bool taskCompleted;
-  Function(bool?)? onChanged;
-  Function(BuildContext)? deleteFunction;
+  final Function(bool?)? onChanged;
+  final Function(BuildContext)? deleteFunction;
 
-  TodoTile({
+  const TodoTile({
     super.key,
     required this.taskName,
     required this.taskCompleted,
@@ -17,15 +16,22 @@ class TodoTile extends StatelessWidget {
   });
 
   @override
+  State<TodoTile> createState() => _TodoTileState();
+}
+
+class _TodoTileState extends State<TodoTile> {
+  bool isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Slidable(
         endActionPane: ActionPane(
-          motion: StretchMotion(),
+          motion: const StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: deleteFunction,
+              onPressed: widget.deleteFunction,
               icon: Icons.delete,
               backgroundColor: Colors.red.shade400,
               borderRadius: BorderRadius.circular(12),
@@ -33,31 +39,78 @@ class TodoTile extends StatelessWidget {
           ],
         ),
         child: Container(
-          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Colors.purple[300],
-              borderRadius: BorderRadius.circular(12)
-          ),
-          child: Row(
-            children: [
-              // checkbox
-              Checkbox(
-                value: taskCompleted,
-                onChanged: onChanged,
-                activeColor: Colors.black87,
-              ),
-        
-              // task name
-              Text(
-                taskName,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  decoration:
-                  taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-                ),
+            color: Colors.purple[300],
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
               ),
             ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  crossAxisAlignment: isExpanded
+                      ? CrossAxisAlignment.start
+                      : CrossAxisAlignment.center,
+                  children: [
+                    // Checkbox
+                    Checkbox(
+                      value: widget.taskCompleted,
+                      onChanged: widget.onChanged,
+                      activeColor: Colors.black87,
+                    ),
+
+                    // Task content
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: isExpanded
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.taskName,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                              decoration: widget.taskCompleted
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                            ),
+                            maxLines: isExpanded ? null : 1,
+                            overflow: isExpanded
+                                ? TextOverflow.visible
+                                : TextOverflow.ellipsis,
+                          ),
+                          if (widget.taskName.length > 40)
+                            Text(
+                              isExpanded ? "Show Less" : "Show More",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
