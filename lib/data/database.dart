@@ -9,8 +9,8 @@ class ToDoDatabase {
   // run this method if this is the 1st time opening this app
   void createInitialData() {
     todoList = [
-      ["Be Disciplined!", false],
-      ["Think positive!", false],
+      ["Be Disciplined!", false, DateTime.now().toString()],
+      ["Think positive!", false, DateTime.now().toString()],
     ];
   }
 

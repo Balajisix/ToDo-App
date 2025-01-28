@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class TodoTile extends StatefulWidget {
   final String taskName;
   final bool taskCompleted;
+  final String timeStamp;
   final Function(bool?)? onChanged;
   final Function(BuildContext)? deleteFunction;
 
@@ -11,6 +12,7 @@ class TodoTile extends StatefulWidget {
     super.key,
     required this.taskName,
     required this.taskCompleted,
+    required this.timeStamp,
     required this.onChanged,
     required this.deleteFunction,
   });
@@ -104,6 +106,14 @@ class _TodoTileState extends State<TodoTile> {
                                 fontSize: 12,
                               ),
                             ),
+                          const SizedBox(height: 8), // Space before timestamp
+                          Text(
+                            "Created on: ${widget.timeStamp}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black87,
+                            ),
+                          ),
                         ],
                       ),
                     ),
